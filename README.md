@@ -28,52 +28,75 @@ A modern AI-powered customer support system built with **LangGraph**, **FastAPI*
 - Python 3.11+
 - At least one LLM API key (Gemini, OpenAI, or Anthropic)
 
-### Option 1: Web Interface (Recommended)
+### Automated Setup (Recommended)
+
+1. **Clone the repository**:
+```bash
+git clone https://github.com/Hamza-Waseem-Nasser/Customer-Support-Demo.git
+cd Customer-Support-Demo
+```
+
+2. **Run setup script**:
+```bash
+# Windows
+setup.bat
+
+# Linux/Mac
+chmod +x setup.sh
+./setup.sh
+```
+
+3. **Add your API keys**:
+   - Edit `backend/.env` and add your API keys
+   - At least one LLM API key is required (Gemini, OpenAI, or Anthropic)
+
+4. **Start the application**:
+```bash
+# Web Interface
+start-server.bat        # Windows
+./start-server.sh       # Linux/Mac
+
+# CLI Interface  
+start-cli.bat          # Windows
+```
+
+### Manual Setup
 
 1. **Clone and setup**:
 ```bash
-git clone https://github.com/yourusername/swiss-airlines-support-bot.git
-cd swiss-airlines-support-bot
+git clone https://github.com/Hamza-Waseem-Nasser/Customer-Support-Demo.git
+cd Customer-Support-Demo
 ```
 
-2. **Install dependencies**:
+2. **Create virtual environment**:
+```bash
+python -m venv .venv
+# Windows
+.venv\Scripts\activate
+# Linux/Mac
+source .venv/bin/activate
+```
+
+3. **Install dependencies**:
 ```bash
 cd backend
 pip install -r requirements.txt
 ```
 
-3. **Configure environment**:
+4. **Configure environment**:
 ```bash
-cp .env.example .env
+cp ../.env.example .env
 # Edit .env and add your API keys
 ```
 
-4. **Start the server**:
+5. **Start the server**:
 ```bash
-# Windows
-../start-server.bat
-
-# Linux/Mac  
-../start-server.sh
-
-# Or manually:
 python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-5. **Open the interface**:
+6. **Open the interface**:
    - Web UI: Open `frontend/index.html` in your browser
    - API Docs: http://localhost:8000/docs
-
-### Option 2: Command Line Interface
-
-```bash
-# Windows
-start-cli.bat
-
-# Or manually:
-cd backend
-python cli.py
-```
 
 ### Option 3: Docker
 
