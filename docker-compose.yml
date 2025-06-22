@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./travel2.sqlite
+      - TAVILY_API_KEY=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
+      - GEMINI_API_KEY=AIzaSyA4FBR5ZcKbNEFIj_TGf3xymFxVWcAzOxU
+    volumes:
+      - ./backend:/app
+      - backend_data:/app/data
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    restart: unless-stopped
+
+  frontend:
+    image: nginx:alpine
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  backend_data:

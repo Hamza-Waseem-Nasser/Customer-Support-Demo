@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swiss Airlines - Customer Support</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked@9.0.0/marked.min.js"></script>
+    <style>
+        :root {
+            --swiss-red: #e30613;
+            --swiss-red-hover: #c50510;
+            --accent-blue: #0066cc;
+            --accent-blue-hover: #0052a3;
+            --success-color: #00c851;
+            --warning-color: #ffbb33;
+            --error-color: #ff4444;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --text-light: #999999;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #e9ecef;
+            --border-color: #dee2e6;
+            --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.12);
+            --shadow-intense: 0 16px 48px rgba(0, 0, 0, 0.2);
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
+            --border-radius-xl: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 18px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #e30613 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--text-primary);
+            font-size: 18px;
+        }
+
+        .chat-container {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-intense);
+            width: 100%;
+            max-width: 1100px;
+            min-width: 800px;
+            height: 85vh;
+            min-height: 700px;
+            max-height: 900px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            animation: slideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--swiss-red) 0%, #ff4757 100%);
+            color: white;
+            padding: 2.5rem 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-medium);
+            position: relative;
+            overflow: hidden;
+            min-height: 120px;
+        }
+
+        .chat-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            z-index: 1;
+        }
+
+        .swiss-logo {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--swiss-red);
+            font-size: 2rem;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .header-info h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .header-info p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin: 0;
+            font-weight: 400;
+        }
+
+        .connection-status {
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .status-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--success-color);
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 12px rgba(0, 200, 81, 0.5);
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.7;
+                transform: scale(1.1);
+            }
+        }
+
+        .messages-area {
+            flex: 1;
+            padding: 3rem;
+            overflow-y: auto;
+            background: var(--bg-secondary);
+            scroll-behavior: smooth;
+            position: relative;
+            font-size: 1.1rem;
+        }
+
+        .messages-area::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .messages-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .messages-area::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 6px;
+        }
+
+        .messages-area::-webkit-scrollbar-thumb:hover {
+            background: var(--text-light);
+        }
+
+        .message {
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            animation: messageSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            justify-content: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            flex-shrink: 0;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, var(--accent-blue) 0%, #0052a3 100%);
+            color: white;
+        }
+
+        .message.assistant .message-avatar {
+            background: linear-gradient(135deg, var(--swiss-red) 0%, #ff4757 100%);
+            color: white;
+        }
+
+        .message-content {
+            max-width: 70%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .message-bubble {
+            padding: 2rem 2.5rem;
+            border-radius: var(--border-radius-lg);
+            word-wrap: break-word;
+            position: relative;
+            box-shadow: var(--shadow-subtle);
+            transition: var(--transition);
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .message.user .message-bubble {
+            background: linear-gradient(135deg, var(--accent-blue) 0%, #0052a3 100%);
+            color: white;
+            border-bottom-right-radius: 8px;
+        }
+
+        .message.assistant .message-bubble {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-bottom-left-radius: 8px;
+        }
+
+        .message-bubble:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .message-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-top: 0.75rem;
+        }
+
+        .message.user .message-meta {
+            justify-content: flex-end;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 2rem 3rem;
+            margin-bottom: 1rem;
+            animation: messageSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .typing-content {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .typing-text {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .typing-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--swiss-red);
+            animation: typingDot 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typingDot {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        .input-area {
+            padding: 3rem;
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 2rem;
+            align-items: flex-end;
+            min-height: 130px;
+        }
+
+        .input-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .input-field {
+            width: 100%;
+            min-height: 70px;
+            max-height: 170px;
+            padding: 1.5rem 2rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            outline: none;
+            font-size: 1.1rem;
+            font-family: inherit;
+            resize: none;
+            transition: var(--transition);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .input-field:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.1);
+        }
+
+        .input-field::placeholder {
+            color: var(--text-light);
+        }
+
+        .send-button {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, #0052a3 100%);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-lg);
+            cursor: pointer;
+            font-size: 1.8rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-subtle);
+            flex-shrink: 0;
+        }
+
+        .send-button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .send-button:active {
+            transform: translateY(-1px);
+        }
+
+        .send-button:disabled {
+            background: var(--bg-tertiary);
+            color: var(--text-light);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .approval-needed {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border: 1px solid var(--warning-color);
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-subtle);
+            animation: messageSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .approval-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .approval-message {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            font-size: 1.1rem;
+        }
+
+        .approval-buttons {
+            display: flex;
+            gap: 1.25rem;
+        }
+
+        .approval-btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .approve-btn {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .approve-btn:hover {
+            background: #00a943;
+            transform: translateY(-2px);
+        }
+
+        .reject-btn {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .reject-btn:hover {
+            background: #e60000;
+            transform: translateY(-2px);
+        }
+
+        .status-info {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 4px solid var(--accent-blue);
+            margin: 2rem 0;
+            border-radius: 0 var(--border-radius-lg) var(--border-radius-lg) 0;
+            color: var(--text-primary);
+            box-shadow: var(--shadow-subtle);
+            animation: messageSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            font-size: 1.1rem;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border: 1px solid var(--error-color);
+            color: var(--text-primary);
+            padding: 1.5rem;
+            border-radius: var(--border-radius-lg);
+            margin: 2rem 0;
+            box-shadow: var(--shadow-subtle);
+            animation: messageSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: flex-start;
+            gap: 1.25rem;
+        }
+
+        .error-icon {
+            color: var(--error-color);
+            font-size: 1.4rem;
+            margin-top: 0.25rem;
+        }
+
+        .error-content {
+            flex: 1;
+        }
+
+        .error-title {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        .error-details {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .retry-button {
+            background: var(--error-color);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1.25rem;
+            transition: var(--transition);
+        }
+
+        .retry-button:hover {
+            background: #e60000;
+            transform: translateY(-1px);
+        }
+
+        /* Markdown styling */
+        .message-bubble pre {
+            background: var(--bg-tertiary);
+            padding: 1.25rem;
+            border-radius: var(--border-radius);
+            overflow-x: auto;
+            margin: 1rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .message-bubble code {
+            background: var(--bg-tertiary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            color: var(--swiss-red);
+            font-weight: 500;
+        }
+
+        .message-bubble pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+            font-weight: normal;
+        }
+
+        .message-bubble blockquote {
+            border-left: 3px solid var(--accent-blue);
+            padding-left: 1.25rem;
+            margin: 1rem 0;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .message-bubble ul, .message-bubble ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        .message-bubble li {
+            margin: 0.75rem 0;
+        }
+
+        .message-bubble strong {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .message-bubble em {
+            color: var(--text-secondary);
+        }
+
+        .message-bubble a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .message-bubble a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            html {
+                font-size: 16px;
+            }
+            
+            .chat-container {
+                min-width: 600px;
+                width: 95%;
+            }
+            
+            body {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            html {
+                font-size: 15px;
+            }
+            
+            body {
+                padding: 0.5rem;
+            }
+            
+            .chat-container {
+                width: 100%;
+                height: 100vh;
+                border-radius: 0;
+                max-height: none;
+                min-width: auto;
+            }
+            
+            .chat-header {
+                padding: 2rem;
+                min-height: 100px;
+            }
+            
+            .header-info h1 {
+                font-size: 1.75rem;
+            }
+            
+            .header-info p {
+                font-size: 1rem;
+            }
+            
+            .swiss-logo {
+                width: 60px;
+                height: 60px;
+                font-size: 1.75rem;
+            }
+            
+            .messages-area {
+                padding: 2rem;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+            
+            .input-area {
+                padding: 2rem;
+                min-height: 115px;
+            }
+            
+            .message-avatar {
+                width: 46px;
+                height: 46px;
+                font-size: 1.1rem;
+            }
+            
+            .input-field {
+                min-height: 60px;
+            }
+            
+            .send-button {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-content {
+                gap: 1.25rem;
+            }
+            
+            .swiss-logo {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .header-info h1 {
+                font-size: 1.5rem;
+            }
+            
+            .header-info p {
+                display: none;
+            }
+            
+            .connection-status {
+                font-size: 1rem;
+            }
+            
+            .message-content {
+                max-width: 90%;
+            }
+            
+            .approval-buttons {
+                flex-direction: column;
+            }
+            
+            .approval-btn {
+                justify-content: center;
+            }
+            
+            .input-area {
+                padding: 1.5rem;
+                min-height: 100px;
+            }
+            
+            .input-field {
+                min-height: 55px;
+                font-size: 16px;
+            }
+            
+            .send-button {
+                width: 55px;
+                height: 55px;
+                font-size: 1.25rem;
+            }
+        }
+
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="header-content">
+                <div class="swiss-logo">✈</div>
+                <div class="header-info">
+                    <h1>Swiss Airlines Support</h1>
+                    <p>Intelligent Customer Assistant</p>
+                </div>
+            </div>
+            <div class="connection-status" id="connectionStatus">
+                <div class="status-dot"></div>
+                <span>Ready</span>
+            </div>
+        </div>
+        
+        <div id="messages" class="messages-area">
+            <div class="message assistant">
+                <div class="message-avatar">SA</div>
+                <div class="message-content">
+                    <div class="message-bubble">
+                        <strong>Welcome to Swiss Airlines Customer Support! ✈️</strong><br><br>
+                        I'm your intelligent assistant, ready to help you with:
+                        <ul>
+                            <li>✈️ Flight bookings and changes</li>
+                            <li>🏨 Hotel reservations</li>
+                            <li>🚗 Car rental services</li>
+                            <li>🎯 Travel recommendations</li>
+                            <li>📋 Policy information</li>
+                            <li>🔍 Real-time travel updates</li>
+                        </ul>
+                        How may I assist you today?
+                    </div>
+                    <div class="message-meta">
+                        <span class="message-time"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="typing-content">
+                <div class="message-avatar">SA</div>
+                <div>
+                    <div class="typing-text">Assistant is typing</div>
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="input-area">
+            <div class="input-container">
+                <textarea 
+                    id="messageInput"
+                    class="input-field"
+                    placeholder="Type your message... (Press Enter to send, Shift+Enter for new line)"
+                    rows="1"
+                    maxlength="2000"
+                    autocomplete="off"
+                    spellcheck="true"
+                ></textarea>
+            </div>
+            <button id="sendButton" class="send-button" onclick="sendMessage()" aria-label="Send message">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const messagesDiv = document.getElementById('messages');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const connectionStatus = document.getElementById('connectionStatus');
+        
+        let sessionId = 'session-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        let isWaitingForApproval = false;
+        let lastMessageId = 0;
+
+        // API Configuration
+        const API_BASE = 'http://localhost:8000';
+
+        // Initialize marked for markdown rendering
+        if (typeof marked !== 'undefined') {
+            marked.setOptions({
+                breaks: true,
+                gfm: true,
+                sanitize: false
+            });
+        }
+
+        // Utility functions
+        function formatTime(date = new Date()) {
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function generateMessageId() {
+            return ++lastMessageId;
+        }
+
+        function autoResizeTextarea() {
+            messageInput.style.height = 'auto';
+            const maxHeight = 170;
+            const newHeight = Math.min(messageInput.scrollHeight, maxHeight);
+            messageInput.style.height = newHeight + 'px';
+        }
+
+        function addMessage(sender, text, isHtml = false) {
+            const messageId = generateMessageId();
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.setAttribute('data-message-id', messageId);
+            
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = 'message-avatar';
+            avatarDiv.textContent = sender === 'user' ? 'YU' : 'SA';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = 'message-bubble';
+            
+            if (isHtml || (typeof marked !== 'undefined' && sender === 'assistant')) {
+                const processedText = typeof marked !== 'undefined' && sender === 'assistant'
+                    ? marked.parse(text)
+                    : text;
+                bubbleDiv.innerHTML = processedText;
+            } else {
+                bubbleDiv.textContent = text;
+            }
+            
+            const metaDiv = document.createElement('div');
+            metaDiv.className = 'message-meta';
+            
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'message-time';
+            timeSpan.textContent = formatTime();
+            
+            if (sender === 'user') {
+                const statusSpan = document.createElement('span');
+                statusSpan.className = 'message-status';
+                statusSpan.innerHTML = '<i class="fas fa-check"></i> Sent';
+                metaDiv.appendChild(statusSpan);
+            }
+            
+            metaDiv.appendChild(timeSpan);
+            
+            contentDiv.appendChild(bubbleDiv);
+            contentDiv.appendChild(metaDiv);
+            
+            messageDiv.appendChild(avatarDiv);
+            messageDiv.appendChild(contentDiv);
+            
+            messagesDiv.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messagesDiv.scrollTo({
+                    top: messagesDiv.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }, 100);
+            
+            return messageDiv;
+        }
+
+        function showTyping() {
+            typingIndicator.style.display = 'block';
+            setTimeout(() => {
+                messagesDiv.scrollTo({
+                    top: messagesDiv.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }, 100);
+        }
+
+        function hideTyping() {
+            typingIndicator.style.display = 'none';
+        }
+
+        function setInputEnabled(enabled) {
+            messageInput.disabled = !enabled;
+            sendButton.disabled = !enabled;
+            
+            if (enabled) {
+                messageInput.focus();
+            }
+        }
+
+        function updateConnectionStatus(connected, message = '') {
+            const statusDot = connectionStatus.querySelector('.status-dot');
+            const statusText = connectionStatus.querySelector('span');
+            
+            if (connected) {
+                statusDot.style.background = 'var(--success-color)';
+                statusDot.style.boxShadow = '0 0 12px rgba(0, 200, 81, 0.5)';
+                statusText.textContent = message || 'Ready';
+                statusDot.style.animation = 'pulse 2s infinite';
+            } else {
+                statusDot.style.background = 'var(--error-color)';
+                statusDot.style.boxShadow = '0 0 12px rgba(255, 68, 68, 0.5)';
+                statusText.textContent = message || 'Disconnected';
+                statusDot.style.animation = 'none';
+            }
+        }
+
+        function showError(message, details = '', canRetry = false) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            
+            const iconDiv = document.createElement('div');
+            iconDiv.className = 'error-icon';
+            iconDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'error-content';
+            
+            const titleDiv = document.createElement('div');
+            titleDiv.className = 'error-title';
+            titleDiv.textContent = 'Error';
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.textContent = message;
+            
+            contentDiv.appendChild(titleDiv);
+            contentDiv.appendChild(messageDiv);
+            
+            if (details) {
+                const detailsDiv = document.createElement('div');
+                detailsDiv.className = 'error-details';
+                detailsDiv.textContent = details;
+                contentDiv.appendChild(detailsDiv);
+            }
+            
+            if (canRetry) {
+                const retryButton = document.createElement('button');
+                retryButton.className = 'retry-button';
+                retryButton.innerHTML = '<i class="fas fa-redo"></i> Retry';
+                retryButton.onclick = () => {
+                    errorDiv.remove();
+                    sendMessage();
+                };
+                contentDiv.appendChild(retryButton);
+            }
+            
+            errorDiv.appendChild(iconDiv);
+            errorDiv.appendChild(contentDiv);
+            
+            messagesDiv.appendChild(errorDiv);
+            messagesDiv.scrollTo({
+                top: messagesDiv.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        function showApprovalRequest(sessionId) {
+            const approvalDiv = document.createElement('div');
+            approvalDiv.className = 'approval-needed';
+            approvalDiv.innerHTML = `
+                <div class="approval-title">
+                    <i class="fas fa-shield-alt"></i>
+                    Action Approval Required
+                </div>
+                <div class="approval-message">
+                    The assistant wants to perform a sensitive action that requires your approval. This helps ensure your data privacy and security.
+                </div>
+                <div class="approval-buttons">
+                    <button class="approval-btn approve-btn" onclick="continueChat('${sessionId}', true)">
+                        <i class="fas fa-check"></i> Approve
+                    </button>
+                    <button class="approval-btn reject-btn" onclick="continueChat('${sessionId}', false)">
+                        <i class="fas fa-times"></i> Reject
+                    </button>
+                </div>
+            `;
+            messagesDiv.appendChild(approvalDiv);
+            messagesDiv.scrollTo({
+                top: messagesDiv.scrollHeight,
+                behavior: 'smooth'
+            });
+            isWaitingForApproval = true;
+            setInputEnabled(false);
+        }
+
+        async function sendMessage() {
+            console.log('Send message function called');
+            const message = messageInput.value.trim();
+            if (!message || isWaitingForApproval) {
+                console.log('Message empty or waiting for approval');
+                return;
+            }
+
+            console.log('Sending message:', message);
+            addMessage('user', message);
+            messageInput.value = '';
+            autoResizeTextarea();
+            
+            showTyping();
+            setInputEnabled(false);
+
+            try {
+                console.log('Making API request to:', `${API_BASE}/chat`);
+                const response = await fetch(`${API_BASE}/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        session_id: sessionId,
+                        passenger_id: '3442 587242'
+                    })
+                });
+
+                console.log('Response status:', response.status);
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.detail || `HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('Response data:', data);
+                hideTyping();
+                
+                sessionId = data.session_id;
+                addMessage('assistant', data.response);
+                
+                await checkForApproval();
+                
+            } catch (error) {
+                hideTyping();
+                console.error('Chat error:', error);
+                
+                let errorMessage = 'Failed to send message';
+                let errorDetails = error.message;
+                let canRetry = true;
+                
+                if (error.message.includes('fetch')) {
+                    errorMessage = 'Connection failed';
+                    errorDetails = 'Could not connect to the server. Please check your connection.';
+                    updateConnectionStatus(false, 'Connection failed');
+                } else if (error.message.includes('HTTP 5')) {
+                    errorMessage = 'Server error';
+                    errorDetails = 'The server encountered an error. Please try again.';
+                } else if (error.message.includes('HTTP 4')) {
+                    errorMessage = 'Request error';
+                    canRetry = false;
+                }
+                
+                showError(errorMessage, errorDetails, canRetry);
+            } finally {
+                if (!isWaitingForApproval) {
+                    setInputEnabled(true);
+                }
+            }
+        }
+
+        async function checkForApproval() {
+            try {
+                const response = await fetch(`${API_BASE}/chat/${sessionId}/status`);
+                if (response.ok) {
+                    const status = await response.json();
+                    if (status.has_interrupt) {
+                        showApprovalRequest(sessionId);
+                    }
+                }
+            } catch (error) {
+                console.error('Status check error:', error);
+            }
+        }
+
+        async function continueChat(sessionId, approve) {
+            const approvalElements = document.querySelectorAll('.approval-needed');
+            approvalElements.forEach(el => {
+                el.style.animation = 'messageSlideIn 0.3s reverse';
+                setTimeout(() => el.remove(), 300);
+            });
+            
+            isWaitingForApproval = false;
+            showTyping();
+
+            try {
+                const response = await fetch(`${API_BASE}/chat/continue?session_id=${sessionId}&approve=${approve}`, {
+                    method: 'POST'
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.detail || `HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                hideTyping();
+                
+                addMessage('assistant', data.response);
+                
+            } catch (error) {
+                hideTyping();
+                console.error('Continue chat error:', error);
+                showError('Failed to continue conversation', error.message, true);
+            } finally {
+                setInputEnabled(true);
+            }
+        }
+
+        // Event listeners
+        messageInput.addEventListener('input', autoResizeTextarea);
+        
+        messageInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        sendButton.addEventListener('click', function() {
+            console.log('Send button clicked');
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+            sendMessage();
+        });
+
+        // Initialize page
+        window.addEventListener('load', function() {
+            console.log('Page loaded');
+            const welcomeTime = document.querySelector('.message-time');
+            if (welcomeTime) {
+                welcomeTime.textContent = formatTime();
+            }
+            
+            messageInput.focus();
+            
+            // Test API connection
+            console.log('Testing API connection...');
+            fetch(`${API_BASE}/health`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('API health check:', data);
+                    updateConnectionStatus(true, 'Ready');
+                    
+                    const statusDiv = document.createElement('div');
+                    statusDiv.className = 'status-info';
+                    statusDiv.innerHTML = `
+                        <i class="fas fa-check-circle" style="color: var(--success-color); margin-right: 1rem;"></i>
+                        Successfully connected to Swiss Airlines API (${data.status})
+                    `;
+                    messagesDiv.appendChild(statusDiv);
+                    messagesDiv.scrollTo({
+                        top: messagesDiv.scrollHeight,
+                        behavior: 'smooth'
+                    });
+                })
+                .catch(error => {
+                    console.error('API connection failed:', error);
+                    updateConnectionStatus(false, 'API unavailable');
+                    showError(
+                        'Could not connect to the API',
+                        'Please make sure the backend server is running on http://localhost:8000',
+                        false
+                    );
+                });
+        });
+
+        // Handle visibility change (for reconnection)
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                fetch(`${API_BASE}/health`)
+                    .then(() => updateConnectionStatus(true, 'Ready'))
+                    .catch(() => updateConnectionStatus(false, 'Connection lost'));
+            }
+        });
+
+        // Global error handler
+        window.addEventListener('error', function(e) {
+            console.error('Global error:', e);
+        });
+
+        // Expose functions for debugging
+        window.ChatDebug = {
+            sendMessage,
+            addMessage,
+            showError,
+            updateConnectionStatus,
+            sessionId: () => sessionId
+        };
+    </script>
+</body>
+</html>
