@@ -8,7 +8,7 @@ services:
     environment:
       - DATABASE_URL=sqlite:///./travel2.sqlite
       - TAVILY_API_KEY=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
-      - GEMINI_API_KEY=AIzaSyA4FBR5ZcKbNEFIj_TGf3xymFxVWcAzOxU
+      - GEMINI_API_KEY
     volumes:
       - ./backend:/app
       - backend_data:/app/data
